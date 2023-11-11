@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: monoFont;
+  src: url(/src/assets/fonts/SourceCodePro-VariableFont_wght.ttf);
+}
+
+@layer base {
+  html {
+    font-family: "monoFont";
+  }
+}
+
+@layer utilities {
+  .custom-boxshadow-light {
+    box-shadow: 15px 15px black;
+  }
+  .custom-boxshadow-dark {
+    box-shadow: 15px 15px #042b0f;
+  }
+}
