@@ -7,8 +7,8 @@ interface usePagination {
 type PaginatedRangeValuesArray = Array<string | number>;
 
 const MIN_VISIBLE_PAGES = 9;
-const visiblePages: Ref<number> = ref(MIN_VISIBLE_PAGES);
-const showEllipses: Ref<boolean> = ref(true);
+const visiblePages = ref(MIN_VISIBLE_PAGES);
+const showEllipses = ref(true);
 
 export default function usePagination(
   currentPage: Ref<number>,
@@ -30,8 +30,6 @@ export default function usePagination(
     if (!isMoreItemsThanVisible.value) {
       return totalPages.value;
     }
-    // Anything less than 5 items being shown doesn't make sense
-    // in this particular UI
     return visiblePages.value < MIN_VISIBLE_PAGES
       ? MIN_VISIBLE_PAGES
       : visiblePages.value;
