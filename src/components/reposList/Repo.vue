@@ -7,7 +7,8 @@ const props = defineProps<{
   description: string | null;
   language: string | null;
   stars: number;
-  url: string;
+  repoUrl: string;
+  ownerUrl: string;
 }>();
 </script>
 
@@ -16,11 +17,15 @@ const props = defineProps<{
     class="flex w-11/12 sm:w-2/3 md:w-2/4 xl:w-2/6 bg-slate-500 dark:bg-green-900 p-2 gap-3 custom-boxshadow-light dark:custom-boxshadow-dark"
   >
     <div class="w-1/3 flex flex-col">
-      <a :href="url" target="_blank" class="cursor-pointer shadow-2xl peer">
+      <a
+        :href="ownerUrl"
+        target="_blank"
+        class="cursor-pointer shadow-2xl peer"
+      >
         <img :src="avatar" alt="avatar" class="w-full" />
       </a>
       <a
-        :href="url"
+        :href="ownerUrl"
         target="_blank"
         class="cursor-pointer self-center mb-4 peer-hover:underline hover:underline text-xs"
         >{{ owner }}</a
@@ -36,11 +41,13 @@ const props = defineProps<{
       </div>
     </div>
     <div class="w-2/3 flex flex-col">
-      <h1
-        class="self-center text-xl text-shadow-sm text-center hyphens-auto break-words"
+      <a
+        :href="repoUrl"
+        target="_blank"
+        class="self-center text-xl text-shadow-sm text-center hyphens-auto break-words hover:text-shadow"
       >
         {{ name }}
-      </h1>
+      </a>
       <p class="hyphens-auto break-words text-sm sm:text-base">
         {{ description }}
       </p>

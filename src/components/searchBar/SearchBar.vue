@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useSearch } from "@composables/useSearch";
-import { ref, watchEffect } from "vue";
-import { useDebounce } from "@vueuse/core";
+import { useDebounceFn } from "@vueuse/core";
 
 const langOptions = [
   "All",
@@ -13,29 +12,39 @@ const langOptions = [
   "Typescript",
   "Rust",
 ];
-const searchedText = ref("");
-const debouncedText = useDebounce(searchedText, 500);
 
-const { getRepos, currentPage, reposPerPage, totalItemsFound, language } =
-  useSearch();
+const {
+  getRepos,
+  currentPage,
+  reposPerPage,
+  totalItemsFound,
+  language,
+  searchedText,
+} = useSearch();
+
+const debouncedFn = useDebounceFn(() => {
+  if (searchedText.value && searchedText.value.trim()) {
+    getRepos(
+      searchedText.value,
+      currentPage.value,
+      reposPerPage.value,
+      language.value
+    );
+  }
+}, 500);
 
 function setLanguage(lang: Event) {
   const target = lang.target as HTMLSelectElement;
   target.value === "All"
     ? (language.value = "")
     : (language.value = "+language:" + target.value);
+  getRepos(
+    searchedText.value,
+    currentPage.value,
+    reposPerPage.value,
+    language.value
+  );
 }
-
-watchEffect(() => {
-  if (debouncedText.value && debouncedText.value.trim()) {
-    getRepos(
-      debouncedText.value,
-      currentPage.value,
-      reposPerPage.value,
-      language.value
-    );
-  }
-});
 </script>
 
 <template>
@@ -43,6 +52,7 @@ watchEffect(() => {
     class="bg-slate-500 dark:bg-green-900 p-2 flex flex-col gap-3 w-11/12 sm:w-2/3 md:w-2/4 xl:w-2/6 custom-boxshadow-light dark:custom-boxshadow-dark text-light-text shadow-light-text dark:text-dark-text dark:shadow-dark-text"
   >
     <input
+      @keyup="debouncedFn"
       placeholder="Type repo name..."
       v-model="searchedText"
       type="text"

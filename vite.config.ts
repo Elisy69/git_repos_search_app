@@ -9,6 +9,7 @@ export default defineConfig({
       "@components": "/src/components",
       "@composables": "/src/composables",
       "@utils": "/src/utils",
+      "@router": "/src/router",
     },
   },
 });

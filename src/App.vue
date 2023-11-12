@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SearchBar from "@components/searchBar/SearchBar.vue";
 import Pagination from "@components/pagination/Pagination.vue";
-import ReposList from "@components/reposList/ReposList.vue";
+
 import Navbar from "@components/Navbar/Navbar.vue";
 import BaseLoading from "@components/BaseLoading.vue";
 import { useSearch } from "@composables/useSearch";
@@ -17,7 +17,7 @@ const { data, isLoading, isTooManyRequests } = useSearch();
     <Navbar />
     <SearchBar />
     <BaseLoading v-if="isLoading && !isTooManyRequests" />
-    <ReposList v-if="data.length && !isLoading" />
+    <RouterView v-if="data.length && !isLoading" />
     <Pagination v-if="data.length && !isLoading" />
     <ErrorMessage v-if="isTooManyRequests" />
   </div>

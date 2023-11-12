@@ -4,21 +4,30 @@ import { useSearch } from "@composables/useSearch";
 
 const reposPerPageRange = [20, 30, 50, 100];
 
-const { currentPage, totalPages, reposPerPage } = useSearch();
+const {
+  currentPage,
+  totalPages,
+  reposPerPage,
+  getRepos,
+  language,
+  searchedText,
+} = useSearch();
 const { pagination } = usePagination(currentPage, totalPages);
 
-function goToPage(page: number) {
-  currentPage.value = page;
+function handlePageChange(newPage: number) {
+  currentPage.value = newPage;
+  getRepos(
+    searchedText.value,
+    currentPage.value,
+    reposPerPage.value,
+    language.value
+  );
 }
-function prevPage() {
-  currentPage.value = currentPage.value - 1;
-}
-function nextPage() {
-  currentPage.value = currentPage.value + 1;
-}
-function setreposPerPage(posts: Event) {
-  const target = posts.target as HTMLSelectElement;
+
+function setReposPerPage(event: Event) {
+  const target = event.target as HTMLSelectElement;
   reposPerPage.value = +target.value;
+  handlePageChange(1);
 }
 </script>
 
@@ -26,11 +35,15 @@ function setreposPerPage(posts: Event) {
   <nav class="flex flex-col gap-2 pb-4">
     <menu class="self-center flex gap-2">
       <select
-        @change="setreposPerPage($event)"
+        @change="setReposPerPage($event)"
         v-model="reposPerPage"
         class="bg-transparent outline-none"
       >
-        <option v-for="option in reposPerPageRange" :value="option">
+        <option
+          v-for="option in reposPerPageRange"
+          :value="option"
+          :key="option"
+        >
           [{{ option }}]
         </option>
       </select>
@@ -38,7 +51,11 @@ function setreposPerPage(posts: Event) {
     </menu>
     <ul class="flex gap-3">
       <li class="flex justify-center">
-        <button class="hover:text-shadow-sm" type="button" @click="prevPage">
+        <button
+          class="hover:text-shadow-sm"
+          type="button"
+          @click="handlePageChange(currentPage - 1)"
+        >
           Previous
         </button>
       </li>
@@ -46,7 +63,7 @@ function setreposPerPage(posts: Event) {
         <button
           v-if="typeof page === 'number'"
           type="button"
-          @click="goToPage(page)"
+          @click="handlePageChange(page)"
           :class="page === currentPage && 'text-shadow-sm'"
           class="hover:text-shadow-sm"
         >
@@ -55,7 +72,11 @@ function setreposPerPage(posts: Event) {
         <span v-else>{{ page }}</span>
       </li>
       <li class="flex justify-center">
-        <button class="hover:text-shadow-sm" type="button" @click="nextPage">
+        <button
+          class="hover:text-shadow-sm"
+          type="button"
+          @click="handlePageChange(currentPage + 1)"
+        >
           Next
         </button>
       </li>

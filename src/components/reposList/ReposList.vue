@@ -1,8 +1,28 @@
 <script lang="ts" setup>
 import { useSearch } from "@composables/useSearch";
 import Repo from "./Repo.vue";
+import { onBeforeRouteUpdate } from "vue-router";
+const { data, language, getRepos, searchedText, currentPage, reposPerPage } =
+  useSearch();
 
-const { data } = useSearch();
+onBeforeRouteUpdate((to, from, next) => {
+  console.log(to);
+  searchedText.value = String(to.query?.q) || "";
+  currentPage.value = to.query?.page ? +to.query.page : 1;
+  reposPerPage.value = to.query?.per_page ? +to.query.per_page : 20;
+  language.value = String(to.query?.language);
+
+  if (to.query) {
+    getRepos(
+      searchedText.value,
+      currentPage.value,
+      reposPerPage.value,
+      language.value
+    );
+  }
+
+  next();
+});
 </script>
 
 <template>
@@ -15,6 +35,7 @@ const { data } = useSearch();
     :description="repo.description"
     :language="repo.language"
     :stars="repo.stargazers_count"
-    :url="repo.html_url"
+    :repoUrl="repo.html_url"
+    :ownerUrl="repo.owner.html_url"
   />
 </template>
