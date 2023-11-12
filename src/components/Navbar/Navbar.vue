@@ -19,11 +19,13 @@ const toggleDark = useToggle(isDark);
       class="flex items-center justify-center w-5 sm:w-7"
       @click="toggleDark()"
     >
-      <MoonIcon class="text-white hover:text-amber-100" v-show="isDark" />
+      <MoonIcon class="text-amber-400 hover:text-amber-100" v-show="isDark" />
       <SunIcon class="text-green-500 hover:text-amber-200" v-show="!isDark" />
     </button>
     <div class="w-12">
-      <span class="line-clamp-2 text-[0.55rem] lg:text-[0.7rem]"
+      <span
+        @click="toggleDark()"
+        class="line-clamp-2 text-[0.55rem] lg:text-[0.7rem] hover:text-gray-300 cursor-pointer"
         >[Toggle theme]</span
       >
     </div>

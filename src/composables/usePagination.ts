@@ -14,13 +14,6 @@ export default function usePagination(
   currentPage: Ref<number>,
   totalPages: Ref<number>
 ): usePagination {
-  // console.log(
-  //   totalPages.value,
-  //   currentPage.value,
-  //   visiblePages.value,
-  //   showEllipses.value
-  // );
-
   const getVisiblePagesThreshold = computed<number>(() =>
     Math.floor((getTotalPages.value - 1) / 2)
   );

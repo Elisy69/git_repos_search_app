@@ -1,13 +1,8 @@
 <script lang="ts" setup>
 import { useSearch } from "@composables/useSearch";
-import { watchEffect } from "vue";
 import Repo from "./Repo.vue";
 
 const { data } = useSearch();
-
-watchEffect(() => {
-  console.log("inside list", data.value);
-});
 </script>
 
 <template>
@@ -20,5 +15,6 @@ watchEffect(() => {
     :description="repo.description"
     :language="repo.language"
     :stars="repo.stargazers_count"
+    :url="repo.html_url"
   />
 </template>

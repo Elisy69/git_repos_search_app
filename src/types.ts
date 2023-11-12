@@ -5,4 +5,5 @@ export interface RepoTypes {
   description: string;
   language: string;
   stargazers_count: number;
+  html_url: string;
 }
