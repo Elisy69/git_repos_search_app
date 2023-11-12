@@ -5,7 +5,7 @@ import { onBeforeRouteUpdate } from "vue-router";
 const { data, language, getRepos, searchedText, currentPage, reposPerPage } =
   useSearch();
 
-onBeforeRouteUpdate((to, from, next) => {
+onBeforeRouteUpdate((to, _, next) => {
   console.log(to);
   searchedText.value = String(to.query?.q) || "";
   currentPage.value = to.query?.page ? +to.query.page : 1;
