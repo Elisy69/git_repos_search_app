@@ -31,12 +31,13 @@ export function useSearch() {
         searchedText !== prevSearchedText ||
         reposPerPage !== prevReposPerPage
       ) {
-        currentPage.value = 1;
+        page = 1;
       }
 
       prevLanguage = language;
       prevSearchedText = searchedText;
       prevReposPerPage = reposPerPage;
+      console.log("current page", page);
 
       const response = await fetch(
         `https://api.github.com/search/repositories?q=${searchedText}${language}&page=${page}&per_page=${reposPerPage}`

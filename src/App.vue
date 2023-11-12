@@ -6,8 +6,13 @@ import Navbar from "@components/Navbar/Navbar.vue";
 import BaseLoading from "@components/BaseLoading.vue";
 import { useSearch } from "@composables/useSearch";
 import ErrorMessage from "@components/ErrorMessage.vue";
+import { watchEffect } from "vue";
 
 const { data, isLoading, isTooManyRequests } = useSearch();
+
+watchEffect(() => {
+  console.log(data.value.length);
+});
 </script>
 
 <template>
