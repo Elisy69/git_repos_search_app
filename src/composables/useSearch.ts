@@ -1,7 +1,12 @@
 import { ref } from "vue";
 import { RepoTypes } from "src/types";
+import { getTotalPages } from "@utils/getTotalPages";
 
 const MAX_REPOS_AVAILABLE = 1000;
+
+let prevLanguage = "";
+let prevSearchedText = "";
+let prevReposPerPage = 0;
 
 const data = ref<RepoTypes[]>([]);
 const isLoading = ref(false);
@@ -21,6 +26,18 @@ export function useSearch() {
   ) => {
     try {
       isLoading.value = true;
+      if (
+        language !== prevLanguage ||
+        searchedText !== prevSearchedText ||
+        reposPerPage !== prevReposPerPage
+      ) {
+        currentPage.value = 1;
+      }
+
+      prevLanguage = language;
+      prevSearchedText = searchedText;
+      prevReposPerPage = reposPerPage;
+
       const response = await fetch(
         `https://api.github.com/search/repositories?q=${searchedText}${language}&page=${page}&per_page=${reposPerPage}`
       );
@@ -31,10 +48,10 @@ export function useSearch() {
       isTooManyRequests.value = false;
       const responseData = await response.json();
       totalItemsFound.value = responseData.total_count;
-      totalPages.value = Math.ceil(
-        totalItemsFound.value < MAX_REPOS_AVAILABLE
-          ? totalItemsFound.value / reposPerPage
-          : MAX_REPOS_AVAILABLE / reposPerPage
+      totalPages.value = getTotalPages(
+        totalItemsFound.value,
+        MAX_REPOS_AVAILABLE,
+        reposPerPage
       );
       data.value = responseData.items;
       isLoading.value = false;

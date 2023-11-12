@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useSearch } from "@composables/useSearch";
-import { ref, watch } from "vue";
+import { ref, watchEffect } from "vue";
 import { useDebounce } from "@vueuse/core";
 
 const langOptions = [
@@ -26,18 +26,15 @@ function setLanguage(lang: Event) {
     : (language.value = "+language:" + target.value);
 }
 
-watch([debouncedText, reposPerPage, language], () => {
-  if (debouncedText.value && debouncedText.value.trim()) currentPage.value = 1;
-  getRepos(
-    debouncedText.value,
-    currentPage.value,
-    reposPerPage.value,
-    language.value
-  );
-});
-
-watch(currentPage, (newPage: number) => {
-  getRepos(debouncedText.value, newPage, reposPerPage.value, language.value);
+watchEffect(() => {
+  if (debouncedText.value && debouncedText.value.trim()) {
+    getRepos(
+      debouncedText.value,
+      currentPage.value,
+      reposPerPage.value,
+      language.value
+    );
+  }
 });
 </script>
 
